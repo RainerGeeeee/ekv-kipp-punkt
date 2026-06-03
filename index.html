@@ -529,6 +529,290 @@
     .headline { font-size: 16px; }
     .y-axis-label { left: -10px; font-size: 9px; }
   }
+
+  /* Burn-Widget — floating bottom-right mini dashboard */
+  .burn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 5;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid rgba(227, 6, 19, 0.15);
+    border-radius: 16px;
+    padding: 16px 20px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08), 0 2px 8px rgba(227,6,19,0.06);
+    animation: slideUp 1s ease-out 1.8s both;
+    min-width: 240px;
+    overflow: hidden;
+  }
+  .burn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(227, 6, 19, 0.04) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .burn-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .burn-title {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+  .burn-pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ekv);
+    box-shadow: 0 0 0 0 var(--ekv-glow);
+    animation: livePulse 2s ease-out infinite;
+  }
+  .burn-value {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--ekv);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    position: relative;
+  }
+  .burn-value .euro {
+    font-size: 16px;
+    font-weight: 700;
+    margin-left: 4px;
+    opacity: 0.7;
+  }
+  .burn-sub {
+    font-size: 10px;
+    color: var(--mute);
+    margin-top: 8px;
+    letter-spacing: 0.05em;
+    position: relative;
+  }
+  .burn-rate {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mute);
+    font-weight: 600;
+    position: relative;
+  }
+  .burn-rate span strong { color: var(--ink); font-weight: 800; }
+
+  @media (max-width: 768px) {
+    .burn { bottom: 12px; right: 12px; left: 12px; min-width: 0; }
+  }
+
+
+  /* Controls panel — below chart */
+  .controls {
+    margin-top: 28px;
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: slideUp 1s ease-out 1.6s both;
+  }
+  .control {
+    flex: 1 1 220px;
+    max-width: 280px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 16px;
+    padding: 14px 18px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .control.umsatz-ctrl { border-color: rgba(0, 131, 63, 0.25); }
+  .control.kosten-ctrl { border-color: rgba(227, 6, 19, 0.25); }
+  .control-label {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .control-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  .umsatz-ctrl .control-dot { background: var(--green); }
+  .kosten-ctrl .control-dot { background: var(--ekv); }
+  .control-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .spin-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,0.05);
+    color: var(--ink);
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+    font-family: inherit;
+  }
+  .spin-btn:hover {
+    background: rgba(0,0,0,0.1);
+    transform: scale(1.08);
+  }
+  .spin-btn:active { transform: scale(0.94); }
+  .umsatz-ctrl .spin-btn:hover { background: rgba(0, 131, 63, 0.15); color: var(--green); }
+  .kosten-ctrl .spin-btn:hover { background: rgba(227, 6, 19, 0.15); color: var(--ekv); }
+  .spin-value {
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--ink);
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.3s ease, transform 0.2s ease;
+    min-width: 90px;
+    text-align: center;
+  }
+  .spin-value.changed {
+    animation: spinPulse 0.4s ease-out;
+  }
+  @keyframes spinPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+    100% { transform: scale(1); }
+  }
+  .spin-value .pct {
+    font-size: 16px;
+    font-weight: 700;
+    margin-left: 2px;
+    opacity: 0.6;
+  }
+  .umsatz-ctrl .spin-value { color: var(--green); }
+  .kosten-ctrl .spin-value { color: var(--ekv); }
+
+  .reset-btn {
+    flex: 0 0 auto;
+    background: var(--ink);
+    color: white;
+    border: none;
+    border-radius: 100px;
+    padding: 14px 24px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    align-self: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .reset-btn.active {
+    opacity: 1;
+    pointer-events: auto;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  }
+  .reset-btn:hover {
+    background: var(--ekv);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px var(--ekv-glow);
+  }
+
+  /* Positive state — when umsatz > kosten growth */
+  .positive .target {
+    background: var(--green);
+    box-shadow: 0 8px 32px rgba(0, 131, 63, 0.5);
+    animation: slideUp 1s ease-out 0.7s both, posGlow 3s ease-in-out infinite 2s;
+  }
+  @keyframes posGlow {
+    0%, 100% { box-shadow: 0 8px 32px rgba(0, 131, 63, 0.5); }
+    50% { box-shadow: 0 8px 48px rgba(0, 131, 63, 0.8); }
+  }
+  .positive .live-dot { background: var(--green); box-shadow: 0 0 0 0 rgba(0, 131, 63, 0.5); }
+  .positive .live-dot { animation: livePulseGreen 2s ease-out infinite; }
+  @keyframes livePulseGreen {
+    0% { box-shadow: 0 0 0 0 rgba(0, 131, 63, 0.5); }
+    70% { box-shadow: 0 0 0 12px rgba(0, 131, 63, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 131, 63, 0); }
+  }
+  .positive .burn-value { color: var(--green); }
+  .positive .burn-pulse { background: var(--green); animation: livePulseGreen 2s ease-out infinite; }
+  .positive .headline em { color: var(--green); }
+  .positive .headline em::after { background: rgba(0, 131, 63, 0.12); }
+  .positive .num { color: var(--green); }
+  .positive .separator { color: var(--green); }
+  .positive .num.tick { animation: tickAnimGreen 0.5s ease-out; }
+  @keyframes tickAnimGreen {
+    0% { transform: translateY(0) scale(1); }
+    40% { transform: translateY(-4px) scale(1.02); color: var(--green); }
+    100% { transform: translateY(0) scale(1); }
+  }
+
+  @media (max-width: 768px) {
+    .controls {
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .control {
+      max-width: 360px;
+      width: 100%;
+      padding: 12px 16px;
+    }
+    .control-spinner {
+      justify-content: center;
+      gap: 28px;
+    }
+    .spin-value {
+      min-width: 70px;
+      font-size: 28px;
+    }
+    .reset-btn {
+      order: 99;
+      width: auto;
+      min-width: 220px;
+      justify-content: center;
+      margin-top: 4px;
+    }
+    .burn {
+      position: static;
+      margin: 16px auto 0;
+      max-width: 360px;
+      width: 100%;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -547,7 +831,7 @@
 
     <main class="hero">
       <h1 class="headline">
-        Ohne Gegensteuerung wird das EKV-Ergebnis erstmals <em>voraussichtlich negativ in</em>
+        Ohne Gegensteuerung wird das EKV-Ergebnis erstmals <em id="headlineEm">voraussichtlich negativ in</em>
       </h1>
 
       <div class="countdown">
@@ -633,8 +917,42 @@
             </div>
           </div>
         </div>
+        <div class="controls">
+          <div class="control umsatz-ctrl">
+            <div class="control-label"><span class="control-dot"></span>Umsatz-Wachstum p.a.</div>
+            <div class="control-spinner">
+              <button class="spin-btn" data-target="umsatz" data-dir="-0.1">−</button>
+              <div class="spin-value" id="umsatzPctEl">1,5<span class="pct">%</span></div>
+              <button class="spin-btn" data-target="umsatz" data-dir="0.1">+</button>
+            </div>
+          </div>
+          <button class="reset-btn" id="resetBtn">
+            <span>↺</span><span>Zurück zur Realität</span>
+          </button>
+          <div class="control kosten-ctrl">
+            <div class="control-label"><span class="control-dot"></span>Kosten-Wachstum p.a.</div>
+            <div class="control-spinner">
+              <button class="spin-btn" data-target="kosten" data-dir="-0.1">−</button>
+              <div class="spin-value" id="kostenPctEl">3,0<span class="pct">%</span></div>
+              <button class="spin-btn" data-target="kosten" data-dir="0.1">+</button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </main>
+    <div class="burn">
+      <div class="burn-head">
+        <div class="burn-title" id="burnTitle">Ergebnis-Schwund</div>
+        <div class="burn-pulse"></div>
+      </div>
+      <div class="burn-value" id="burnValue">0,00<span class="euro">EUR</span></div>
+      <div class="burn-sub" id="burnSub">seit Sie diese Seite geöffnet haben</div>
+      <div class="burn-rate">
+        <span><strong id="burnPerHour">0</strong> EUR/h</span>
+        <span><strong id="burnPerDay">0</strong> EUR/Tag</span>
+      </div>
+    </div>
   </div>
 
 <script>
@@ -643,6 +961,74 @@
     document.documentElement.style.setProperty('--mx', e.clientX + 'px');
     document.documentElement.style.setProperty('--my', e.clientY + 'px');
   });
+
+  // ===== Reactive Math (must come first — burn counter depends on it) =====
+  const U0 = 170, K0 = 145;
+  const DEFAULT_U_PCT = 1.5, DEFAULT_K_PCT = 3.0;
+  let uPct = DEFAULT_U_PCT, kPct = DEFAULT_K_PCT;
+  const START_DATE = new Date();
+  const months = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+  let CROSS_YEARS = null;
+  let CROSS_DATE = null;
+
+  function recompute() {
+    const u = 1 + uPct / 100;
+    const k = 1 + kPct / 100;
+    if (k > u) {
+      CROSS_YEARS = Math.log(U0/K0) / Math.log(k/u);
+      CROSS_DATE = new Date(START_DATE.getTime() + CROSS_YEARS * 365.2425 * 86400 * 1000);
+    } else {
+      CROSS_YEARS = null;
+      CROSS_DATE = null;
+    }
+  }
+  recompute();
+
+
+  // ===== BURN COUNTER (reactive) =====
+  let BURN_PER_YEAR, BURN_PER_SECOND, BURN_PER_HOUR, BURN_PER_DAY;
+  let burnAccumulated = 0;
+  let burnLastT = performance.now();
+  const PAGE_LOAD = performance.now();
+
+  function recomputeBurn() {
+    // dE/dt at t=0 = U0*ln(1+u) - K0*ln(1+k)
+    BURN_PER_YEAR = K0 * Math.log(1 + kPct/100) - U0 * Math.log(1 + uPct/100);
+    // Positive value = ergebnis schrumpft. Negative = ergebnis wächst.
+    BURN_PER_SECOND = BURN_PER_YEAR * 1_000_000 / (365.2425 * 86400);
+    BURN_PER_HOUR = BURN_PER_SECOND * 3600;
+    BURN_PER_DAY = BURN_PER_SECOND * 86400;
+  }
+  recomputeBurn();
+
+  function fmtEUR(v) {
+    return v.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function fmtEURInt(v) {
+    return Math.round(v).toLocaleString('de-DE');
+  }
+  function updateBurnRates() {
+    const sign = BURN_PER_HOUR >= 0 ? '' : '+';
+    document.getElementById('burnPerHour').textContent = sign + fmtEURInt(Math.abs(BURN_PER_HOUR));
+    document.getElementById('burnPerDay').textContent = sign + fmtEURInt(Math.abs(BURN_PER_DAY));
+    document.getElementById('burnTitle').textContent = BURN_PER_HOUR >= 0 ? 'Ergebnis-Schwund' : 'Ergebnis-Plus';
+    document.getElementById('burnSub').textContent = BURN_PER_HOUR >= 0
+      ? 'seit Sie diese Seite geöffnet haben'
+      : 'aufgebaut seit Sie hier sind';
+  }
+  updateBurnRates();
+
+  function updateBurn() {
+    const now = performance.now();
+    const dt = (now - burnLastT) / 1000;
+    burnLastT = now;
+    burnAccumulated += dt * BURN_PER_SECOND;
+    const display = Math.abs(burnAccumulated);
+    const prefix = burnAccumulated < 0 ? '+' : '';
+    document.getElementById('burnValue').innerHTML = prefix + fmtEUR(display) + '<span class="euro">EUR</span>';
+    requestAnimationFrame(updateBurn);
+  }
+  requestAnimationFrame(updateBurn);
 
   // ===== WOW: Generate floating particles =====
   const particlesEl = document.getElementById('particles');
@@ -663,15 +1049,16 @@
     particlesEl.appendChild(p);
   }
 
-  // ===== Math =====
-  const CROSS_YEARS = Math.log(170/145) / Math.log(1.030/1.015);
-  const START_DATE = new Date();
-  const CROSS_DATE = new Date(START_DATE.getTime() + CROSS_YEARS * 365.2425 * 86400 * 1000);
-
-  // Format target date
-  const months = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+  // ===== Target pill =====
   const targetEl = document.getElementById('targetDate');
-  targetEl.innerHTML = `Voraussichtlicher Kipp-Punkt: ${CROSS_DATE.getDate()}. ${months[CROSS_DATE.getMonth()]} ${CROSS_DATE.getFullYear()}`;
+  function updateTargetPill() {
+    if (CROSS_DATE) {
+      targetEl.innerHTML = `Voraussichtlicher Kipp-Punkt: ${CROSS_DATE.getDate()}. ${months[CROSS_DATE.getMonth()]} ${CROSS_DATE.getFullYear()}`;
+    } else {
+      targetEl.innerHTML = `Kein Kipp-Punkt. Die Schere bleibt offen.`;
+    }
+  }
+  updateTargetPill();
 
   // ===== WOW: Count-up animation on first load =====
   const totalSecAtStart = Math.floor((CROSS_DATE - new Date()) / 1000);
@@ -707,6 +1094,13 @@
   let countdownStarted = false;
   function updateCountdown() {
     if (!countdownStarted) return;
+    if (!CROSS_DATE) {
+      document.getElementById('days').textContent = '----';
+      document.getElementById('hours').textContent = '--';
+      document.getElementById('minutes').textContent = '--';
+      document.getElementById('seconds').textContent = '--';
+      return;
+    }
     const now = new Date();
     let diffMs = CROSS_DATE - now;
     if (diffMs < 0) diffMs = 0;
@@ -741,8 +1135,8 @@
 
   const periods = [];
   for (let i = 0; i <= 12; i++) periods.push(i);
-  const umsatzVals = periods.map(t => 170 * Math.pow(1.015, t));
-  const kostenVals = periods.map(t => 145 * Math.pow(1.030, t));
+  let umsatzVals = periods.map(t => umsatzAt(t));
+  let kostenVals = periods.map(t => kostenAt(t));
 
   const yMin = 140, yMax = 210;
   const xMax = 12;
@@ -753,8 +1147,8 @@
     const p = (px - PAD_L) / CHART_W * xMax;
     return Math.max(0, Math.min(xMax, p));
   }
-  function umsatzAt(t) { return 170 * Math.pow(1.015, t); }
-  function kostenAt(t) { return 145 * Math.pow(1.030, t); }
+  function umsatzAt(t) { return U0 * Math.pow(1 + uPct/100, t); }
+  function kostenAt(t) { return K0 * Math.pow(1 + kPct/100, t); }
 
   // X axis baseline
   const xAxis = document.getElementById('xAxis');
@@ -929,6 +1323,111 @@
     crosshairK.classList.remove('visible');
     tooltip.classList.remove('visible');
   }
+
+  // ===== CONTROLS — Spinner buttons + Reset =====
+  const umsatzPctEl = document.getElementById('umsatzPctEl');
+  const kostenPctEl = document.getElementById('kostenPctEl');
+  const resetBtn = document.getElementById('resetBtn');
+  const headlineEm = document.getElementById('headlineEm');
+
+  function fmtPct(v) {
+    return v.toFixed(1).replace('.', ',') + '<span class="pct">%</span>';
+  }
+
+  function rebuildChartPaths() {
+    umsatzVals = periods.map(t => umsatzAt(t));
+    kostenVals = periods.map(t => kostenAt(t));
+    document.getElementById('umsatzPath').setAttribute('d', pathFrom(umsatzVals));
+    document.getElementById('kostenPath').setAttribute('d', pathFrom(kostenVals));
+    // Update band
+    let bandD = 'M' + xPx(0) + ',' + yPx(umsatzVals[0]) + ' ';
+    for (let i = 1; i <= xMax; i++) bandD += 'L' + xPx(i) + ',' + yPx(umsatzVals[i]) + ' ';
+    for (let i = xMax; i >= 0; i--) bandD += 'L' + xPx(i) + ',' + yPx(kostenVals[i]) + ' ';
+    bandD += 'Z';
+    document.getElementById('bandPath').setAttribute('d', bandD);
+    // Update line labels position
+    const ulE = document.getElementById('umsatzLabel');
+    ulE.setAttribute('y', yPx(umsatzVals[xMax]) + 4);
+    ulE.textContent = `Umsatz +${uPct.toFixed(1).replace('.', ',')}%`;
+    const klE = document.getElementById('kostenLabel');
+    klE.setAttribute('y', yPx(kostenVals[xMax]) + 4);
+    klE.textContent = `Kosten +${kPct.toFixed(1).replace('.', ',')}%`;
+    // Update cross marker
+    if (CROSS_YEARS !== null && CROSS_YEARS <= xMax) {
+      const cX = xPx(CROSS_YEARS);
+      const cY = yPx(umsatzAt(CROSS_YEARS));
+      document.getElementById('crossMarker').innerHTML = `
+        <line class="cross-line" x1="${cX}" y1="${PAD_T}" x2="${cX}" y2="${PAD_T + CHART_H}"/>
+        <circle cx="${cX}" cy="${cY}" r="22" fill="url(#crossGlow)"/>
+        <circle class="cross-glow" cx="${cX}" cy="${cY}" r="9" fill="#E30613"/>
+        <text x="${cX}" y="${PAD_T - 14}" text-anchor="middle" font-size="11" font-weight="800" letter-spacing="2" fill="#E30613">VORAUSSICHTLICHER KIPP-PUNKT</text>
+      `;
+    } else {
+      document.getElementById('crossMarker').innerHTML = '';
+    }
+  }
+
+  function applyState() {
+    recompute();
+    recomputeBurn();
+    updateTargetPill();
+    rebuildChartPaths();
+    updateTodayMarker();
+    updateBurnRates();
+    // Toggle positive class on stage
+    const stage = document.querySelector('.stage');
+    if (BURN_PER_YEAR < 0) {
+      stage.classList.add('positive');
+      headlineEm.textContent = 'voraussichtlich im Plus für immer.';
+    } else {
+      stage.classList.remove('positive');
+      headlineEm.textContent = 'voraussichtlich negativ in';
+    }
+    // Toggle reset button visibility
+    const isDefault = Math.abs(uPct - DEFAULT_U_PCT) < 0.001 && Math.abs(kPct - DEFAULT_K_PCT) < 0.001;
+    if (isDefault) resetBtn.classList.remove('active');
+    else resetBtn.classList.add('active');
+  }
+
+  document.querySelectorAll('.spin-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.target;
+      const dir = parseFloat(btn.dataset.dir);
+      if (target === 'umsatz') {
+        uPct = Math.max(0, Math.min(10, Math.round((uPct + dir) * 10) / 10));
+        umsatzPctEl.innerHTML = fmtPct(uPct);
+        umsatzPctEl.classList.remove('changed');
+        void umsatzPctEl.offsetWidth;
+        umsatzPctEl.classList.add('changed');
+      } else {
+        kPct = Math.max(0, Math.min(10, Math.round((kPct + dir) * 10) / 10));
+        kostenPctEl.innerHTML = fmtPct(kPct);
+        kostenPctEl.classList.remove('changed');
+        void kostenPctEl.offsetWidth;
+        kostenPctEl.classList.add('changed');
+      }
+      applyState();
+    });
+  });
+
+  resetBtn.addEventListener('click', () => {
+    uPct = DEFAULT_U_PCT;
+    kPct = DEFAULT_K_PCT;
+    umsatzPctEl.innerHTML = fmtPct(uPct);
+    kostenPctEl.innerHTML = fmtPct(kPct);
+    umsatzPctEl.classList.add('changed');
+    kostenPctEl.classList.add('changed');
+    setTimeout(() => {
+      umsatzPctEl.classList.remove('changed');
+      kostenPctEl.classList.remove('changed');
+    }, 400);
+    applyState();
+  });
+
+  // Initialize labels
+  umsatzPctEl.innerHTML = fmtPct(uPct);
+  kostenPctEl.innerHTML = fmtPct(kPct);
+
 </script>
 </body>
 </html>
