@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EKV // Der Wachstumskorridor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ekv: #E30613;
+    --ekv-glow: rgba(227, 6, 19, 0.5);
+    --ekv-soft: #FFE0E2;
+    --green: #00833F;
+    --green-soft: rgba(0, 131, 63, 0.15);
+    --ink: #0A0A0A;
+    --ink2: #2D2D33;
+    --mute: #6E6E76;
+    --faint: #A5A5AD;
+    --line: #ECECF0;
+    --bg: #FAFAFA;
+  }
+
+  html, body {
+    height: 100%;
+    background: #FFFFFF;
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    cursor: default;
+  }
+
+  /* MOUSE-TRACKING SPOTLIGHT */
+  .spotlight {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(circle 400px at var(--mx, 50%) var(--my, 50%),
+                                 rgba(227, 6, 19, 0.07) 0%,
+                                 rgba(227, 6, 19, 0.02) 30%,
+                                 transparent 60%);
+    transition: background 0.1s ease-out;
+  }
+
+  /* PARTICLE FIELD */
+  .particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+  .particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--ekv);
+    opacity: 0;
+    box-shadow: 0 0 8px var(--ekv);
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    0% { opacity: 0; transform: translateY(0) scale(0); }
+    10% { opacity: 0.5; transform: translateY(-50px) scale(1); }
+    90% { opacity: 0.3; transform: translateY(-90vh) scale(1); }
+    100% { opacity: 0; transform: translateY(-100vh) scale(0); }
+  }
+
+  /* Subtle drift background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(circle at 15% 25%, rgba(227, 6, 19, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 85% 75%, rgba(0, 131, 63, 0.04) 0%, transparent 40%);
+    animation: drift 25s ease-in-out infinite alternate;
+  }
+  @keyframes drift {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(-40px, 30px) scale(1.1); }
+  }
+
+  .stage {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 5vw;
+  }
+
+  /* Top brand bar — just minimal text now */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4vh;
+    animation: fadeIn 0.8s ease-out;
+  }
+  .brand-text {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .brand-text .accent {
+    color: var(--ekv);
+    margin: 0 10px;
+    font-weight: 400;
+  }
+  .topbar-meta {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--mute);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--ekv);
+    box-shadow: 0 0 0 0 var(--ekv-glow);
+    animation: livePulse 2s ease-out infinite;
+  }
+  @keyframes livePulse {
+    0% { box-shadow: 0 0 0 0 var(--ekv-glow); }
+    70% { box-shadow: 0 0 0 12px rgba(227, 6, 19, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(227, 6, 19, 0); }
+  }
+
+  /* Hero */
+  .hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 4vh 0;
+  }
+
+  /* Headline above countdown */
+  .headline {
+    font-size: clamp(20px, 2.5vw, 32px);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    max-width: 28ch;
+    margin: 0 auto 40px;
+    animation: slideUp 0.8s ease-out 0.35s both;
+  }
+  .headline em {
+    font-style: normal;
+    color: var(--ekv);
+    position: relative;
+    white-space: nowrap;
+  }
+  .headline em::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: rgba(227, 6, 19, 0.12);
+    z-index: -1;
+    border-radius: 2px;
+  }
+
+  /* Countdown */
+  .countdown {
+    display: flex;
+    gap: clamp(8px, 1.5vw, 24px);
+    margin: 0 0 32px;
+    animation: slideUp 1s ease-out 0.5s both;
+    align-items: flex-end;
+  }
+
+  .num-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .num-wrap {
+    position: relative;
+    padding: 0;
+  }
+
+  .num {
+    font-size: clamp(56px, 10vw, 140px);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.06em;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    position: relative;
+  }
+
+  .num.tick {
+    animation: tickAnim 0.5s ease-out;
+  }
+  @keyframes tickAnim {
+    0% { transform: translateY(0) scale(1); }
+    40% { transform: translateY(-4px) scale(1.02); color: var(--ekv); }
+    100% { transform: translateY(0) scale(1); }
+  }
+
+  .num-label {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin-top: 16px;
+    font-weight: 600;
+  }
+
+  .separator {
+    font-size: clamp(40px, 7vw, 96px);
+    color: var(--ekv);
+    font-weight: 300;
+    line-height: 0.95;
+    align-self: flex-start;
+    opacity: 0.4;
+    animation: blink 1.5s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  /* Target date */
+  .target {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    background: var(--ekv);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border-radius: 100px;
+    margin-top: 12px;
+    box-shadow: 0 8px 32px var(--ekv-glow);
+    animation: slideUp 1s ease-out 0.7s both, targetGlow 3s ease-in-out infinite 2s;
+  }
+  @keyframes targetGlow {
+    0%, 100% { box-shadow: 0 8px 32px rgba(227, 6, 19, 0.5); }
+    50% { box-shadow: 0 8px 48px rgba(227, 6, 19, 0.8); }
+  }
+  .target::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    animation: blink 1.5s ease-in-out infinite;
+  }
+
+  /* Chart progress bar */
+  .progress {
+    margin-top: 7vh;
+    max-width: 1200px;
+    width: 100%;
+    align-self: center;
+    animation: slideUp 1.2s ease-out 1s both;
+  }
+
+  .progress-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 16px;
+    padding: 0 4px;
+  }
+  .progress-title {
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--mute);
+    font-weight: 600;
+  }
+  .progress-end {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ekv);
+    font-weight: 700;
+  }
+
+  .chart-wrap {
+    position: relative;
+    cursor: crosshair;
+  }
+
+  svg.chart {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 4px 24px rgba(0,0,0,0.05));
+  }
+
+  .y-axis-label {
+    position: absolute;
+    top: 50%;
+    left: -16px;
+    transform: translateY(-50%) rotate(-90deg);
+    transform-origin: center;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--mute);
+    white-space: nowrap;
+  }
+
+  /* HOVER TOOLTIP + CROSSHAIR */
+  .tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--ink);
+    color: white;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    z-index: 10;
+    min-width: 180px;
+    transform: translate(-50%, -100%) translateY(-12px);
+  }
+  .tooltip.visible {
+    opacity: 1;
+  }
+  .tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid var(--ink);
+  }
+  .tooltip-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 2px 0;
+  }
+  .tooltip-row.head {
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    padding-bottom: 4px;
+    margin-bottom: 4px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 10px;
+  }
+  .tooltip-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .tooltip-label {
+    color: rgba(255,255,255,0.7);
+    font-size: 11px;
+  }
+  .tooltip-value {
+    color: white;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* SVG path animations */
+  .grid-line { stroke: var(--line); stroke-width: 1; }
+  .axis-line { stroke: var(--ink2); stroke-width: 1.5; }
+
+  .band {
+    fill: url(#bandGrad);
+    opacity: 0;
+    animation: fadeBand 1.5s ease-out 2.8s forwards;
+  }
+  @keyframes fadeBand { to { opacity: 1; } }
+
+  .line-umsatz, .line-kosten {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 4;
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 2000;
+  }
+  .line-umsatz {
+    stroke: var(--green);
+    animation: drawLine 2.6s cubic-bezier(0.25, 0.1, 0.25, 1) 1.3s forwards;
+  }
+  .line-kosten {
+    stroke: var(--ekv);
+    animation: drawLine 2.6s cubic-bezier(0.25, 0.1, 0.25, 1) 1.5s forwards;
+    filter: drop-shadow(0 0 8px rgba(227, 6, 19, 0.3));
+  }
+  @keyframes drawLine { to { stroke-dashoffset: 0; } }
+
+  .label-line {
+    font-size: 12px;
+    font-weight: 700;
+    opacity: 0;
+    animation: fadeLabel 0.6s ease-out 3.8s forwards;
+  }
+  @keyframes fadeLabel { to { opacity: 1; } }
+
+  .today-marker {
+    opacity: 0;
+    animation: fadeLabel 0.6s ease-out 3.5s forwards;
+  }
+  .today-line {
+    stroke: var(--ink);
+    stroke-width: 2;
+    stroke-dasharray: 4,4;
+  }
+  .today-dot {
+    fill: var(--ink);
+    animation: dotPulse 2s ease-in-out infinite 4s;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  @keyframes dotPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+  }
+
+  .cross-marker {
+    opacity: 0;
+    animation: fadeLabel 0.8s ease-out 4.2s forwards;
+  }
+  .cross-line {
+    stroke: var(--ekv);
+    stroke-width: 2;
+    stroke-dasharray: 6,6;
+  }
+  .cross-glow {
+    fill: var(--ekv);
+    animation: crossPulse 2s ease-in-out infinite 4.5s;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  @keyframes crossPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.6; }
+  }
+
+  .y-tick { font-size: 11px; fill: var(--faint); font-weight: 500; }
+  .x-tick { font-size: 11px; fill: var(--faint); font-weight: 500; }
+
+  /* Crosshair lines (hover) */
+  .crosshair-line {
+    stroke: var(--ink);
+    stroke-width: 1;
+    stroke-dasharray: 3,3;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  .crosshair-line.visible { opacity: 0.6; }
+  .crosshair-dot {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  .crosshair-dot.visible { opacity: 1; }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* WOW: Initial reveal — viewport blur fades in */
+  .reveal-overlay {
+    position: fixed;
+    inset: 0;
+    background: white;
+    z-index: 100;
+    animation: revealFade 1.2s ease-out forwards;
+    pointer-events: none;
+  }
+  @keyframes revealFade {
+    0% { opacity: 1; backdrop-filter: blur(20px); }
+    100% { opacity: 0; backdrop-filter: blur(0); pointer-events: none; }
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .countdown { gap: 4px; }
+    .num { font-size: 14vw; }
+    .separator { font-size: 8vw; }
+    .num-label { font-size: 9px; letter-spacing: 0.3em; }
+    .topbar-meta { font-size: 9px; }
+    .headline { font-size: 16px; }
+    .y-axis-label { left: -10px; font-size: 9px; }
+  }
+</style>
+</head>
+<body>
+  <div class="reveal-overlay"></div>
+  <div class="spotlight"></div>
+  <div class="particles" id="particles"></div>
+
+  <div class="stage">
+    <header class="topbar">
+      <div class="brand-text">EKV <span class="accent">//</span> Wachstumsstrategie</div>
+      <div class="topbar-meta">
+        <span class="live-dot"></span>
+        <span>Live Counter</span>
+      </div>
+    </header>
+
+    <main class="hero">
+      <h1 class="headline">
+        Ohne Gegensteuerung wird das EKV-Ergebnis erstmals <em>voraussichtlich negativ in</em>
+      </h1>
+
+      <div class="countdown">
+        <div class="num-block">
+          <div class="num-wrap"><div class="num" id="days">0000</div></div>
+          <div class="num-label">Tagen</div>
+        </div>
+        <div class="separator">:</div>
+        <div class="num-block">
+          <div class="num-wrap"><div class="num" id="hours">00</div></div>
+          <div class="num-label">Stunden</div>
+        </div>
+        <div class="separator">:</div>
+        <div class="num-block">
+          <div class="num-wrap"><div class="num" id="minutes">00</div></div>
+          <div class="num-label">Minuten</div>
+        </div>
+        <div class="separator">:</div>
+        <div class="num-block">
+          <div class="num-wrap"><div class="num" id="seconds">00</div></div>
+          <div class="num-label">Sekunden</div>
+        </div>
+      </div>
+
+      <div class="target" id="targetDate"></div>
+
+      <div class="progress">
+        <div class="progress-head">
+          <div class="progress-title">Wachstumskorridor &nbsp;•&nbsp; Heute → Voraussichtlicher Kipp-Punkt</div>
+          
+        </div>
+        <div class="chart-wrap" id="chartWrap">
+          <div class="y-axis-label">Wert in Mio. EUR</div>
+          <svg class="chart" viewBox="0 0 1200 360" preserveAspectRatio="xMidYMid meet" id="chart">
+            <defs>
+              <linearGradient id="bandGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#00833F" stop-opacity="0.25"/>
+                <stop offset="60%" stop-color="#00833F" stop-opacity="0.15"/>
+                <stop offset="100%" stop-color="#E30613" stop-opacity="0.05"/>
+              </linearGradient>
+              <radialGradient id="crossGlow">
+                <stop offset="0%" stop-color="#E30613" stop-opacity="0.6"/>
+                <stop offset="100%" stop-color="#E30613" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+
+            <g id="grid"></g>
+            <g id="yLabels"></g>
+            <g id="xLabels"></g>
+            <line id="xAxis" class="axis-line"/>
+
+            <path id="bandPath" class="band" d=""/>
+            <path id="kostenPath" class="line-kosten" d=""/>
+            <path id="umsatzPath" class="line-umsatz" d=""/>
+
+            <g class="today-marker" id="todayMarker"></g>
+            <g class="cross-marker" id="crossMarker"></g>
+
+            <text id="umsatzLabel" class="label-line" fill="#00833F"></text>
+            <text id="kostenLabel" class="label-line" fill="#E30613"></text>
+
+            <!-- Crosshair (hover) -->
+            <line id="crosshairV" class="crosshair-line"/>
+            <circle id="crosshairUmsatz" class="crosshair-dot" r="6" fill="#00833F" stroke="white" stroke-width="2"/>
+            <circle id="crosshairKosten" class="crosshair-dot" r="6" fill="#E30613" stroke="white" stroke-width="2"/>
+
+            <!-- Hover capture rect -->
+            <rect id="hoverArea" fill="transparent" />
+          </svg>
+          <div class="tooltip" id="tooltip">
+            <div class="tooltip-row head" id="tooltipDate"></div>
+            <div class="tooltip-row">
+              <span><span class="tooltip-dot" style="background:#00833F"></span><span class="tooltip-label">Umsatz</span></span>
+              <span class="tooltip-value" id="tooltipUmsatz">–</span>
+            </div>
+            <div class="tooltip-row">
+              <span><span class="tooltip-dot" style="background:#E30613"></span><span class="tooltip-label">Kosten</span></span>
+              <span class="tooltip-value" id="tooltipKosten">–</span>
+            </div>
+            <div class="tooltip-row" style="border-top:1px solid rgba(255,255,255,0.15);padding-top:4px;margin-top:4px;">
+              <span class="tooltip-label">Ergebnis</span>
+              <span class="tooltip-value" id="tooltipErgebnis">–</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+<script>
+  // ===== WOW: Mouse spotlight tracking =====
+  document.addEventListener('mousemove', (e) => {
+    document.documentElement.style.setProperty('--mx', e.clientX + 'px');
+    document.documentElement.style.setProperty('--my', e.clientY + 'px');
+  });
+
+  // ===== WOW: Generate floating particles =====
+  const particlesEl = document.getElementById('particles');
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.bottom = '0';
+    p.style.animationDuration = (15 + Math.random() * 20) + 's';
+    p.style.animationDelay = (Math.random() * 15) + 's';
+    p.style.width = (2 + Math.random() * 3) + 'px';
+    p.style.height = p.style.width;
+    // Mix red and green
+    if (i % 3 === 0) {
+      p.style.background = 'var(--green)';
+      p.style.boxShadow = '0 0 8px var(--green)';
+    }
+    particlesEl.appendChild(p);
+  }
+
+  // ===== Math =====
+  const CROSS_YEARS = Math.log(170/145) / Math.log(1.030/1.015);
+  const START_DATE = new Date();
+  const CROSS_DATE = new Date(START_DATE.getTime() + CROSS_YEARS * 365.2425 * 86400 * 1000);
+
+  // Format target date
+  const months = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+  const targetEl = document.getElementById('targetDate');
+  targetEl.innerHTML = `Voraussichtlicher Kipp-Punkt: ${CROSS_DATE.getDate()}. ${months[CROSS_DATE.getMonth()]} ${CROSS_DATE.getFullYear()}`;
+
+  // ===== WOW: Count-up animation on first load =====
+  const totalSecAtStart = Math.floor((CROSS_DATE - new Date()) / 1000);
+  const days0 = Math.floor(totalSecAtStart / 86400);
+  const hours0 = Math.floor((totalSecAtStart % 86400) / 3600);
+  const minutes0 = Math.floor((totalSecAtStart % 3600) / 60);
+  const seconds0 = totalSecAtStart % 60;
+
+  function animateNumber(el, target, duration, padLen) {
+    const start = performance.now();
+    function frame(now) {
+      const t = Math.min((now - start) / duration, 1);
+      // ease-out cubic
+      const eased = 1 - Math.pow(1 - t, 3);
+      const val = Math.floor(target * eased);
+      el.textContent = String(val).padStart(padLen, '0');
+      if (t < 1) requestAnimationFrame(frame);
+      else el.textContent = String(target).padStart(padLen, '0');
+    }
+    requestAnimationFrame(frame);
+  }
+
+  // Trigger count-up after the reveal
+  setTimeout(() => {
+    animateNumber(document.getElementById('days'), days0, 2200, 4);
+    animateNumber(document.getElementById('hours'), hours0, 1800, 2);
+    animateNumber(document.getElementById('minutes'), minutes0, 1600, 2);
+    animateNumber(document.getElementById('seconds'), seconds0, 1500, 2);
+  }, 1200);
+
+  // Live countdown (after intro)
+  let lastSecond = -1;
+  let countdownStarted = false;
+  function updateCountdown() {
+    if (!countdownStarted) return;
+    const now = new Date();
+    let diffMs = CROSS_DATE - now;
+    if (diffMs < 0) diffMs = 0;
+
+    const totalSeconds = Math.floor(diffMs / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    document.getElementById('days').textContent = String(days).padStart(4, '0');
+    document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+    document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+    const secEl = document.getElementById('seconds');
+    secEl.textContent = String(seconds).padStart(2, '0');
+
+    if (seconds !== lastSecond) {
+      secEl.classList.remove('tick');
+      void secEl.offsetWidth;
+      secEl.classList.add('tick');
+      lastSecond = seconds;
+    }
+  }
+  setTimeout(() => { countdownStarted = true; }, 4000);
+  setInterval(updateCountdown, 1000);
+
+  // ===== Chart =====
+  const SVG_W = 1200, SVG_H = 360;
+  const PAD_L = 60, PAD_R = 100, PAD_T = 40, PAD_B = 50;
+  const CHART_W = SVG_W - PAD_L - PAD_R;
+  const CHART_H = SVG_H - PAD_T - PAD_B;
+
+  const periods = [];
+  for (let i = 0; i <= 12; i++) periods.push(i);
+  const umsatzVals = periods.map(t => 170 * Math.pow(1.015, t));
+  const kostenVals = periods.map(t => 145 * Math.pow(1.030, t));
+
+  const yMin = 140, yMax = 210;
+  const xMax = 12;
+
+  function xPx(p) { return PAD_L + (p / xMax) * CHART_W; }
+  function yPx(v) { return PAD_T + (1 - (v - yMin) / (yMax - yMin)) * CHART_H; }
+  function pxToYear(px) {
+    const p = (px - PAD_L) / CHART_W * xMax;
+    return Math.max(0, Math.min(xMax, p));
+  }
+  function umsatzAt(t) { return 170 * Math.pow(1.015, t); }
+  function kostenAt(t) { return 145 * Math.pow(1.030, t); }
+
+  // X axis baseline
+  const xAxis = document.getElementById('xAxis');
+  xAxis.setAttribute('x1', PAD_L);
+  xAxis.setAttribute('y1', PAD_T + CHART_H);
+  xAxis.setAttribute('x2', PAD_L + CHART_W);
+  xAxis.setAttribute('y2', PAD_T + CHART_H);
+
+  // Y grid + labels
+  const grid = document.getElementById('grid');
+  const yLabelsG = document.getElementById('yLabels');
+  for (let v = 150; v <= 200; v += 10) {
+    const y = yPx(v);
+    grid.innerHTML += `<line class="grid-line" x1="${PAD_L}" y1="${y}" x2="${PAD_L + CHART_W}" y2="${y}"/>`;
+    yLabelsG.innerHTML += `<text class="y-tick" x="${PAD_L - 12}" y="${y + 4}" text-anchor="end">${v}</text>`;
+  }
+
+  // X labels
+  const xLabelsG = document.getElementById('xLabels');
+  for (let i = 0; i <= xMax; i++) {
+    const x = xPx(i);
+    xLabelsG.innerHTML += `<text class="x-tick" x="${x}" y="${PAD_T + CHART_H + 22}" text-anchor="middle">${i}</text>`;
+  }
+  xLabelsG.innerHTML += `<text class="x-tick" x="${PAD_L + CHART_W / 2}" y="${SVG_H - 8}" text-anchor="middle" font-weight="600">Jahre ab heute</text>`;
+
+  // Paths
+  function pathFrom(vals) {
+    let d = '';
+    vals.forEach((v, i) => {
+      d += (i === 0 ? 'M' : 'L') + xPx(i) + ',' + yPx(v) + ' ';
+    });
+    return d;
+  }
+  document.getElementById('umsatzPath').setAttribute('d', pathFrom(umsatzVals));
+  document.getElementById('kostenPath').setAttribute('d', pathFrom(kostenVals));
+
+  // Band
+  let band = 'M' + xPx(0) + ',' + yPx(umsatzVals[0]) + ' ';
+  for (let i = 1; i <= xMax; i++) band += 'L' + xPx(i) + ',' + yPx(umsatzVals[i]) + ' ';
+  for (let i = xMax; i >= 0; i--) band += 'L' + xPx(i) + ',' + yPx(kostenVals[i]) + ' ';
+  band += 'Z';
+  document.getElementById('bandPath').setAttribute('d', band);
+
+  // Today marker
+  function updateTodayMarker() {
+    const elapsedMs = new Date() - START_DATE;
+    const elapsedYears = elapsedMs / (365.2425 * 86400 * 1000);
+    const todayX = xPx(elapsedYears);
+    const uy = yPx(umsatzAt(elapsedYears));
+    const ky = yPx(kostenAt(elapsedYears));
+
+    document.getElementById('todayMarker').innerHTML = `
+      <line class="today-line" x1="${todayX}" y1="${PAD_T}" x2="${todayX}" y2="${PAD_T + CHART_H}"/>
+      <circle class="today-dot" cx="${todayX}" cy="${uy}" r="7"/>
+      <circle class="today-dot" cx="${todayX}" cy="${ky}" r="7"/>
+      <text x="${todayX}" y="${PAD_T - 14}" text-anchor="middle" font-size="11" font-weight="800" letter-spacing="2" fill="#0A0A0A">HEUTE</text>
+    `;
+  }
+  updateTodayMarker();
+  setInterval(updateTodayMarker, 1000 * 60 * 60);
+
+  // Cross marker
+  const crossX = xPx(CROSS_YEARS);
+  const crossY = yPx(umsatzAt(CROSS_YEARS));
+  document.getElementById('crossMarker').innerHTML = `
+    <line class="cross-line" x1="${crossX}" y1="${PAD_T}" x2="${crossX}" y2="${PAD_T + CHART_H}"/>
+    <circle cx="${crossX}" cy="${crossY}" r="22" fill="url(#crossGlow)"/>
+    <circle class="cross-glow" cx="${crossX}" cy="${crossY}" r="9" fill="#E30613"/>
+    <text x="${crossX}" y="${PAD_T - 14}" text-anchor="middle" font-size="11" font-weight="800" letter-spacing="2" fill="#E30613">VORAUSSICHTLICHER KIPP-PUNKT</text>
+  `;
+
+  // Line end labels
+  const ul = document.getElementById('umsatzLabel');
+  ul.setAttribute('x', xPx(xMax) + 14);
+  ul.setAttribute('y', yPx(umsatzVals[xMax]) + 4);
+  ul.textContent = 'Umsatz +1,5%';
+
+  const kl = document.getElementById('kostenLabel');
+  kl.setAttribute('x', xPx(xMax) + 14);
+  kl.setAttribute('y', yPx(kostenVals[xMax]) + 4);
+  kl.textContent = 'Kosten +3%';
+
+  // ===== HOVER TOOLTIP + CROSSHAIR =====
+  const svg = document.getElementById('chart');
+  const hoverArea = document.getElementById('hoverArea');
+  hoverArea.setAttribute('x', PAD_L);
+  hoverArea.setAttribute('y', PAD_T);
+  hoverArea.setAttribute('width', CHART_W);
+  hoverArea.setAttribute('height', CHART_H);
+
+  const crosshairV = document.getElementById('crosshairV');
+  const crosshairU = document.getElementById('crosshairUmsatz');
+  const crosshairK = document.getElementById('crosshairKosten');
+  const tooltip = document.getElementById('tooltip');
+  const chartWrap = document.getElementById('chartWrap');
+
+  function fmtMio(v) {
+    return v.toFixed(2).replace('.', ',') + ' Mio';
+  }
+  function fmtErg(v) {
+    const sign = v >= 0 ? '+' : '−';
+    const abs = Math.abs(v).toFixed(2).replace('.', ',');
+    return sign + abs + ' Mio';
+  }
+  function fmtDate(d) {
+    return d.getDate() + '. ' + months[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  function getSvgPoint(evt) {
+    const pt = svg.createSVGPoint();
+    pt.x = evt.clientX;
+    pt.y = evt.clientY;
+    const ctm = svg.getScreenCTM().inverse();
+    return pt.matrixTransform(ctm);
+  }
+
+  svg.addEventListener('mousemove', (e) => {
+    const p = getSvgPoint(e);
+    if (p.x < PAD_L || p.x > PAD_L + CHART_W) {
+      hideTooltip();
+      return;
+    }
+    const year = pxToYear(p.x);
+    const u = umsatzAt(year);
+    const k = kostenAt(year);
+    const erg = u - k;
+
+    // Position crosshair
+    const xPos = xPx(year);
+    crosshairV.setAttribute('x1', xPos);
+    crosshairV.setAttribute('y1', PAD_T);
+    crosshairV.setAttribute('x2', xPos);
+    crosshairV.setAttribute('y2', PAD_T + CHART_H);
+    crosshairV.classList.add('visible');
+
+    crosshairU.setAttribute('cx', xPos);
+    crosshairU.setAttribute('cy', yPx(u));
+    crosshairU.classList.add('visible');
+
+    crosshairK.setAttribute('cx', xPos);
+    crosshairK.setAttribute('cy', yPx(k));
+    crosshairK.classList.add('visible');
+
+    // Tooltip content
+    const date = new Date(START_DATE.getTime() + year * 365.2425 * 86400 * 1000);
+    document.getElementById('tooltipDate').textContent = `+${year.toFixed(2)} J  •  ${fmtDate(date)}`;
+    document.getElementById('tooltipUmsatz').textContent = fmtMio(u);
+    document.getElementById('tooltipKosten').textContent = fmtMio(k);
+    const ergEl = document.getElementById('tooltipErgebnis');
+    ergEl.textContent = fmtErg(erg);
+    ergEl.style.color = erg >= 0 ? '#7FE39E' : '#FF8A95';
+
+    // Tooltip position in DOM coords
+    const wrapRect = chartWrap.getBoundingClientRect();
+    const svgRect = svg.getBoundingClientRect();
+    const scaleX = svgRect.width / SVG_W;
+    const scaleY = svgRect.height / SVG_H;
+    const tipX = xPos * scaleX;
+    const tipY = Math.min(yPx(u), yPx(k)) * scaleY;
+    tooltip.style.left = tipX + 'px';
+    tooltip.style.top = tipY + 'px';
+    tooltip.classList.add('visible');
+  });
+
+  svg.addEventListener('mouseleave', () => {
+    hideTooltip();
+  });
+
+  function hideTooltip() {
+    crosshairV.classList.remove('visible');
+    crosshairU.classList.remove('visible');
+    crosshairK.classList.remove('visible');
+    tooltip.classList.remove('visible');
+  }
+</script>
+</body>
+</html>
