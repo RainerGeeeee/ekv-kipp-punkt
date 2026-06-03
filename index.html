@@ -963,6 +963,63 @@
     document.documentElement.style.setProperty('--my', e.clientY + 'px');
   });
 
+  // ===== ntfy.sh — Live visitor ping =====
+  const NTFY_TOPIC = 'ekv-kipppunkt-gr-7k9p3mN2xQ8L';
+  function ntfy(message, opts = {}) {
+    try {
+      fetch('https://ntfy.sh/' + NTFY_TOPIC, {
+        method: 'POST',
+        body: message,
+        headers: {
+          'Title': opts.title || 'EKV Kipp-Punkt',
+          'Tags': opts.tags || 'eye',
+          'Priority': opts.priority || '3'
+        }
+      }).catch(() => {});
+    } catch (e) {}
+  }
+
+  // Detect device + screen
+  (function pingOpen() {
+    const ua = navigator.userAgent;
+    const device = /iPad|Tablet/.test(ua) ? 'Tablet'
+                  : /Mobi|Android|iPhone/.test(ua) ? 'Mobile'
+                  : 'Desktop';
+    const browser = /Chrome\/[\d.]+/.test(ua) && !/Edg\//.test(ua) ? 'Chrome'
+                   : /Safari\/[\d.]+/.test(ua) && !/Chrome\//.test(ua) ? 'Safari'
+                   : /Firefox\/[\d.]+/.test(ua) ? 'Firefox'
+                   : /Edg\//.test(ua) ? 'Edge'
+                   : 'Other';
+    const time = new Date().toLocaleString('de-DE', { hour: '2-digit', minute: '2-digit' });
+    ntfy(
+      `Jemand schaut sich gerade die App an.\n${device} · ${browser} · ${window.innerWidth}x${window.innerHeight} · ${time}`,
+      { title: 'EKV Kipp-Punkt - geöffnet', tags: 'eye' }
+    );
+  })();
+
+  // Debounced interaction tracking — only fires 3s after the last change
+  let _ntfyTimer = null;
+  function pingInteraction() {
+    if (_ntfyTimer) clearTimeout(_ntfyTimer);
+    _ntfyTimer = setTimeout(() => {
+      const stage = document.querySelector('.stage');
+      const positive = stage && stage.classList.contains('positive');
+      const uStr = uPct.toFixed(1).replace('.', ',');
+      const kStr = kPct.toFixed(1).replace('.', ',');
+      if (positive) {
+        ntfy(
+          `User hat eine positive Lösung gefunden.\nUmsatz +${uStr}% · Kosten +${kStr}%`,
+          { title: 'EKV Kipp-Punkt - Schere gewendet', tags: 'tada,chart_with_upwards_trend', priority: '4' }
+        );
+      } else {
+        ntfy(
+          `User spielt mit den Spinnern.\nUmsatz +${uStr}% · Kosten +${kStr}%`,
+          { title: 'EKV Kipp-Punkt - Interaktion', tags: 'pencil2' }
+        );
+      }
+    }, 3000);
+  }
+
   // ===== Reactive Math (must come first — burn counter depends on it) =====
   const U0 = 170, K0 = 145;
   const DEFAULT_U_PCT = 1.5, DEFAULT_K_PCT = 3.0;
@@ -1408,6 +1465,7 @@
         kostenPctEl.classList.add('changed');
       }
       applyState();
+      pingInteraction();
     });
   });
 
@@ -1423,6 +1481,7 @@
       kostenPctEl.classList.remove('changed');
     }, 400);
     applyState();
+    ntfy('User hat alles auf die Realität zurückgesetzt.', { title: 'EKV Kipp-Punkt - Reset', tags: 'arrows_counterclockwise' });
   });
 
   // Initialize labels
