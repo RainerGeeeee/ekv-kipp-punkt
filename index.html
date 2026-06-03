@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EKV // Der Wachstumskorridor</title>
+<title>Wachstumskorridor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -11,9 +11,9 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --ekv: #E30613;
-    --ekv-glow: rgba(227, 6, 19, 0.5);
-    --ekv-soft: #FFE0E2;
+    --accent: #E30613;
+    --accent-glow: rgba(227, 6, 19, 0.5);
+    --accent-soft: #FFE0E2;
     --green: #00833F;
     --green-soft: rgba(0, 131, 63, 0.15);
     --ink: #0A0A0A;
@@ -61,9 +61,9 @@
     width: 3px;
     height: 3px;
     border-radius: 50%;
-    background: var(--ekv);
+    background: var(--accent);
     opacity: 0;
-    box-shadow: 0 0 8px var(--ekv);
+    box-shadow: 0 0 8px var(--accent);
     animation: floatUp linear infinite;
   }
   @keyframes floatUp {
@@ -115,7 +115,7 @@
     color: var(--ink);
   }
   .brand-text .accent {
-    color: var(--ekv);
+    color: var(--accent);
     margin: 0 10px;
     font-weight: 400;
   }
@@ -132,12 +132,12 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--ekv);
-    box-shadow: 0 0 0 0 var(--ekv-glow);
+    background: var(--accent);
+    box-shadow: 0 0 0 0 var(--accent-glow);
     animation: livePulse 2s ease-out infinite;
   }
   @keyframes livePulse {
-    0% { box-shadow: 0 0 0 0 var(--ekv-glow); }
+    0% { box-shadow: 0 0 0 0 var(--accent-glow); }
     70% { box-shadow: 0 0 0 12px rgba(227, 6, 19, 0); }
     100% { box-shadow: 0 0 0 0 rgba(227, 6, 19, 0); }
   }
@@ -166,7 +166,7 @@
   }
   .headline em {
     font-style: normal;
-    color: var(--ekv);
+    color: var(--accent);
     position: relative;
     white-space: nowrap;
   }
@@ -218,7 +218,7 @@
   }
   @keyframes tickAnim {
     0% { transform: translateY(0) scale(1); }
-    40% { transform: translateY(-4px) scale(1.02); color: var(--ekv); }
+    40% { transform: translateY(-4px) scale(1.02); color: var(--accent); }
     100% { transform: translateY(0) scale(1); }
   }
 
@@ -233,7 +233,7 @@
 
   .separator {
     font-size: clamp(40px, 7vw, 96px);
-    color: var(--ekv);
+    color: var(--accent);
     font-weight: 300;
     line-height: 0.95;
     align-self: flex-start;
@@ -251,7 +251,7 @@
     align-items: center;
     gap: 12px;
     padding: 12px 24px;
-    background: var(--ekv);
+    background: var(--accent);
     color: white;
     font-size: 14px;
     font-weight: 700;
@@ -259,7 +259,7 @@
     text-transform: uppercase;
     border-radius: 100px;
     margin-top: 12px;
-    box-shadow: 0 8px 32px var(--ekv-glow);
+    box-shadow: 0 8px 32px var(--accent-glow);
     animation: slideUp 1s ease-out 0.7s both, targetGlow 3s ease-in-out infinite 2s;
   }
   @keyframes targetGlow {
@@ -302,7 +302,7 @@
     font-size: 11px;
     letter-spacing: 0.25em;
     text-transform: uppercase;
-    color: var(--ekv);
+    color: var(--accent);
     font-weight: 700;
   }
 
@@ -423,7 +423,7 @@
     animation: drawLine 2.6s cubic-bezier(0.25, 0.1, 0.25, 1) 1.3s forwards;
   }
   .line-kosten {
-    stroke: var(--ekv);
+    stroke: var(--accent);
     animation: drawLine 2.6s cubic-bezier(0.25, 0.1, 0.25, 1) 1.5s forwards;
     filter: drop-shadow(0 0 8px rgba(227, 6, 19, 0.3));
   }
@@ -462,12 +462,12 @@
     animation: fadeLabel 0.8s ease-out 4.2s forwards;
   }
   .cross-line {
-    stroke: var(--ekv);
+    stroke: var(--accent);
     stroke-width: 2;
     stroke-dasharray: 6,6;
   }
   .cross-glow {
-    fill: var(--ekv);
+    fill: var(--accent);
     animation: crossPulse 2s ease-in-out infinite 4.5s;
     transform-origin: center;
     transform-box: fill-box;
@@ -572,15 +572,15 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: var(--ekv);
-    box-shadow: 0 0 0 0 var(--ekv-glow);
+    background: var(--accent);
+    box-shadow: 0 0 0 0 var(--accent-glow);
     animation: livePulse 2s ease-out infinite;
   }
   .burn-value {
     font-size: 28px;
     font-weight: 900;
     letter-spacing: -0.03em;
-    color: var(--ekv);
+    color: var(--accent);
     line-height: 1;
     font-variant-numeric: tabular-nums;
     position: relative;
@@ -658,7 +658,7 @@
     border-radius: 50%;
   }
   .umsatz-ctrl .control-dot { background: var(--green); }
-  .kosten-ctrl .control-dot { background: var(--ekv); }
+  .kosten-ctrl .control-dot { background: var(--accent); }
   .control-spinner {
     display: flex;
     align-items: center;
@@ -689,7 +689,7 @@
   }
   .spin-btn:active { transform: scale(0.94); }
   .umsatz-ctrl .spin-btn:hover { background: rgba(0, 131, 63, 0.15); color: var(--green); }
-  .kosten-ctrl .spin-btn:hover { background: rgba(227, 6, 19, 0.15); color: var(--ekv); }
+  .kosten-ctrl .spin-btn:hover { background: rgba(227, 6, 19, 0.15); color: var(--accent); }
   .spin-value {
     font-size: 26px;
     font-weight: 900;
@@ -715,7 +715,7 @@
     opacity: 0.6;
   }
   .umsatz-ctrl .spin-value { color: var(--green); }
-  .kosten-ctrl .spin-value { color: var(--ekv); }
+  .kosten-ctrl .spin-value { color: var(--accent); }
 
   .reset-btn {
     flex: 0 0 auto;
@@ -744,9 +744,9 @@
     box-shadow: 0 4px 16px rgba(0,0,0,0.15);
   }
   .reset-btn:hover {
-    background: var(--ekv);
+    background: var(--accent);
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px var(--ekv-glow);
+    box-shadow: 0 8px 24px var(--accent-glow);
   }
 
   /* Positive state — when umsatz > kosten growth */
@@ -778,6 +778,149 @@
     40% { transform: translateY(-4px) scale(1.02); color: var(--green); }
     100% { transform: translateY(0) scale(1); }
   }
+
+  /* Password gate */
+  .gate {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    transition: opacity 0.5s ease, visibility 0.5s ease, backdrop-filter 0.5s ease;
+  }
+  .gate.unlocked {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  .gate-card {
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(30px);
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 22px;
+    padding: 36px 36px 28px;
+    width: 380px;
+    max-width: 100%;
+    text-align: center;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.18), 0 6px 24px rgba(0,0,0,0.08);
+    animation: gateRise 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  @keyframes gateRise {
+    0% { transform: translateY(28px) scale(0.96); opacity: 0; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+  }
+  .gate-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-soft), rgba(255,255,255,0.6));
+    border: 1px solid rgba(227, 6, 19, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+  .gate-eyebrow {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin-bottom: 10px;
+  }
+  .gate-title {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 6px;
+    line-height: 1.15;
+  }
+  .gate-desc {
+    font-size: 13px;
+    color: var(--mute);
+    margin-bottom: 22px;
+    line-height: 1.4;
+  }
+  .gate-input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1.5px solid rgba(0,0,0,0.1);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: 0.12em;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background: white;
+  }
+  .gate-input::placeholder {
+    color: var(--faint);
+    letter-spacing: 0.15em;
+    font-weight: 500;
+  }
+  .gate-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.08);
+  }
+  .gate-input.wrong {
+    border-color: var(--accent);
+    animation: shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+  }
+  @keyframes shake {
+    10%, 90% { transform: translateX(-2px); }
+    20%, 80% { transform: translateX(4px); }
+    30%, 50%, 70% { transform: translateX(-8px); }
+    40%, 60% { transform: translateX(8px); }
+  }
+  .gate-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 14px 16px;
+    border: none;
+    border-radius: 12px;
+    background: var(--ink);
+    color: white;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  }
+  .gate-btn:hover {
+    background: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px var(--accent-glow);
+  }
+  .gate-btn:active {
+    transform: translateY(0);
+  }
+  .gate-hint {
+    margin-top: 14px;
+    font-size: 11px;
+    color: var(--faint);
+    letter-spacing: 0.1em;
+    min-height: 14px;
+    transition: color 0.2s ease;
+  }
+  .gate-hint.error { color: var(--accent); font-weight: 600; }
+  .gate-hint.success { color: var(--green); font-weight: 600; }
 
   @media (max-width: 768px) {
     .controls {
@@ -817,13 +960,24 @@
 </style>
 </head>
 <body>
+  <div class="gate" id="gate">
+    <div class="gate-card">
+      <div class="gate-icon">//</div>
+      <div class="gate-eyebrow">Zugang erforderlich</div>
+      <div class="gate-title">Geschützter Bereich</div>
+      <div class="gate-desc">Dieser Wachstumskorridor ist nur für eingeladene Personen.</div>
+      <input type="password" id="gateInput" class="gate-input" placeholder="Passwort eingeben" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+      <button class="gate-btn" id="gateBtn">Entsperren</button>
+      <div class="gate-hint" id="gateHint">&nbsp;</div>
+    </div>
+  </div>
   <div class="reveal-overlay"></div>
   <div class="spotlight"></div>
   <div class="particles" id="particles"></div>
 
   <div class="stage">
     <header class="topbar">
-      <div class="brand-text">EKV <span class="accent">//</span> Wachstumsstrategie</div>
+      <div class="brand-text"><span class="accent">//</span> Wachstumskorridor</div>
       <div class="topbar-meta">
         <span class="live-dot"></span>
         <span>Live Counter</span>
@@ -832,7 +986,7 @@
 
     <main class="hero">
       <h1 class="headline">
-        Ohne Gegensteuerung wird das EKV-Ergebnis erstmals <em id="headlineEm">voraussichtlich negativ in</em>
+        Ohne Gegensteuerung wird das Ergebnis erstmals <em id="headlineEm">voraussichtlich negativ in</em>
       </h1>
 
       <div class="countdown">
@@ -964,14 +1118,14 @@
   });
 
   // ===== ntfy.sh — Live visitor ping =====
-  const NTFY_TOPIC = 'ekv-kipppunkt-gr-7k9p3mN2xQ8L';
+  const NTFY_TOPIC = 'wk-korridor-gr-7k9p3mN2xQ8L';
   function ntfy(message, opts = {}) {
     try {
       fetch('https://ntfy.sh/' + NTFY_TOPIC, {
         method: 'POST',
         body: message,
         headers: {
-          'Title': opts.title || 'EKV Kipp-Punkt',
+          'Title': opts.title || 'Wachstumskorridor',
           'Tags': opts.tags || 'eye',
           'Priority': opts.priority || '3'
         }
@@ -979,8 +1133,8 @@
     } catch (e) {}
   }
 
-  // Detect device + screen
-  (function pingOpen() {
+  // Detect device + screen — fires only AFTER the password gate is unlocked
+  function pingOpen() {
     const ua = navigator.userAgent;
     const device = /iPad|Tablet/.test(ua) ? 'Tablet'
                   : /Mobi|Android|iPhone/.test(ua) ? 'Mobile'
@@ -993,9 +1147,78 @@
     const time = new Date().toLocaleString('de-DE', { hour: '2-digit', minute: '2-digit' });
     ntfy(
       `Jemand schaut sich gerade die App an.\n${device} · ${browser} · ${window.innerWidth}x${window.innerHeight} · ${time}`,
-      { title: 'EKV Kipp-Punkt - geöffnet', tags: 'eye' }
+      { title: 'Wachstumskorridor - geöffnet', tags: 'eye' }
     );
-  })();
+  }
+
+  // ===== Password Gate =====
+  const PWD_HASH = '158a323a7ba44870f23d96f1516dd70aa48e9a72db4ebb026b0a89e212a208ab';
+  const SESSION_KEY = 'wk_unlocked_v2';
+
+  async function sha256Hex(text) {
+    const buf = new TextEncoder().encode(text);
+    const hash = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(hash))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
+
+  const gateEl = document.getElementById('gate');
+  const gateInput = document.getElementById('gateInput');
+  const gateBtn = document.getElementById('gateBtn');
+  const gateHint = document.getElementById('gateHint');
+
+  let _wrongCount = 0;
+  let _gateUnlocked = false;
+
+  function unlockGate(skipPing) {
+    if (_gateUnlocked) return;
+    _gateUnlocked = true;
+    gateEl.classList.add('unlocked');
+    try { sessionStorage.setItem(SESSION_KEY, '1'); } catch (e) {}
+    if (!skipPing) pingOpen();
+  }
+
+  async function tryUnlock() {
+    const val = gateInput.value;
+    if (!val) return;
+    const h = await sha256Hex(val);
+    if (h === PWD_HASH) {
+      gateHint.textContent = 'Entsperrt';
+      gateHint.className = 'gate-hint success';
+      setTimeout(() => unlockGate(false), 400);
+    } else {
+      _wrongCount++;
+      gateInput.classList.remove('wrong');
+      void gateInput.offsetWidth;
+      gateInput.classList.add('wrong');
+      gateHint.textContent = 'Falsches Passwort';
+      gateHint.className = 'gate-hint error';
+      gateInput.select();
+      if (_wrongCount === 3) {
+        ntfy('Jemand hat 3x das falsche Passwort eingegeben.', { title: 'Wachstumskorridor - Fehlversuche', tags: 'warning' });
+      }
+    }
+  }
+
+  gateBtn.addEventListener('click', tryUnlock);
+  gateInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); tryUnlock(); }
+  });
+  gateInput.addEventListener('input', () => {
+    gateInput.classList.remove('wrong');
+    if (gateHint.classList.contains('error')) {
+      gateHint.textContent = ' ';
+      gateHint.className = 'gate-hint';
+    }
+  });
+
+  // Skip the gate if already verified this session
+  if (sessionStorage.getItem(SESSION_KEY) === '1') {
+    unlockGate(true);
+  } else {
+    setTimeout(() => gateInput.focus(), 700);
+  }
 
   // Debounced interaction tracking — only fires 3s after the last change
   let _ntfyTimer = null;
@@ -1009,12 +1232,12 @@
       if (positive) {
         ntfy(
           `User hat eine positive Lösung gefunden.\nUmsatz +${uStr}% · Kosten +${kStr}%`,
-          { title: 'EKV Kipp-Punkt - Schere gewendet', tags: 'tada,chart_with_upwards_trend', priority: '4' }
+          { title: 'Wachstumskorridor - Schere gewendet', tags: 'tada,chart_with_upwards_trend', priority: '4' }
         );
       } else {
         ntfy(
           `User spielt mit den Spinnern.\nUmsatz +${uStr}% · Kosten +${kStr}%`,
-          { title: 'EKV Kipp-Punkt - Interaktion', tags: 'pencil2' }
+          { title: 'Wachstumskorridor - Interaktion', tags: 'pencil2' }
         );
       }
     }, 3000);
@@ -1481,7 +1704,7 @@
       kostenPctEl.classList.remove('changed');
     }, 400);
     applyState();
-    ntfy('User hat alles auf die Realität zurückgesetzt.', { title: 'EKV Kipp-Punkt - Reset', tags: 'arrows_counterclockwise' });
+    ntfy('User hat alles auf die Realität zurückgesetzt.', { title: 'Wachstumskorridor - Reset', tags: 'arrows_counterclockwise' });
   });
 
   // Initialize labels
